@@ -21,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'pggni(t+5rj@%zzmpw#orp_pmx2r%xo9v8_q_t#6wo@pf+n3sp'
+SECRET_KEY = os.getenv("SECRET_KEY", get_random_secret_key())
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+# SECURITY WARNING: update this when you have the production host
+ALLOWED_HOSTS = ['peacetotheworldlifestyle.azurewebsites.net']
 
 
 # Application definition
@@ -79,10 +79,39 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+
+###########################
+####### Deployment Config ###########
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_PASSWORD = 'Pe@cet0thew0rld' #my gmail password
+EMAIL_HOST_USER = 'peacetotheworldlifestyle@gmail.com' #my gmail username
+DEFAULT_FROM_EMAIL = 'peacetotheworldlifestyle@gmail.com'
+SERVER_EMAIL = 'peacetotheworldlifestyle@gmail.com'
+EMAIL_PORT = 587
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+#############
+
+hostname = os.environ['POSTGRES_DBHOST']
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ['POSTGRES_DBNAME'],
+        'HOST': hostname + ".postgres.database.azure.com",
+        'USER': os.environ['POSTGRES_DBUSER'] + "@" + hostname,
+        'PASSWORD': os.environ['POSTGRES_DBPASS'],
+        'PORT': os.environ['POSTGRES_DBPORT'],
+        'OPTIONS': {
+            'sslmode': 'require',
+        }
     }
 }
 

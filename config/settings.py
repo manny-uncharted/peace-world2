@@ -100,12 +100,12 @@ EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 #############
 
-hostname = os.environ['POSTGRES_DBHOST']
+# hostname = os.environ['POSTGRES_DBHOST']
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.environ['POSTGRES_DBNAME'],
-        'HOST': hostname + ".postgres.database.azure.com",
+        'HOST': 'POSTGRES_DBHOST'
         'USER': os.environ['POSTGRES_DBUSER'] + "@" + hostname,
         'PASSWORD': os.environ['POSTGRES_DBPASS'],
         'PORT': os.environ['POSTGRES_DBPORT'],

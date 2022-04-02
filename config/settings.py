@@ -159,8 +159,13 @@ STATIC_URL = '/static/'
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'media'),
+    os.path.join(BASE_DIR, 'static'),
 )
+
+# STATICFILES_FINDERS = (
+#     'django.contrib.staticfiles.finders.FileSystemFinder',
+#     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+# )
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -168,12 +173,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 LOGIN_REDIRECT_URL='home'
 LOGOUT_REDIRECT_URL='login'
 
-# PAYPAL_RECEIVER_EMAIL = 'sb-c5xgx6555500@business.example.com'
-# PAYPAL_TEST = True
-
 JET_SIDE_MENU_COMPACT = True
 
 
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+#############################
+######## Deployment config #########
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
-# django_heroku.settings(locals())
+######################
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

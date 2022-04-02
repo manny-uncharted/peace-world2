@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from django.http import JsonResponse,HttpResponse
+from django.http import JsonResponse, HttpResponse
 from .models import Banner,Category,Brand,Product,ProductAttribute,CartOrder,CartOrderItems,ProductReview,Wishlist,UserAddressBook
 from django.db.models import Max,Min,Count,Avg
 from django.db.models.functions import ExtractMonth
@@ -7,57 +7,64 @@ from django.template.loader import render_to_string
 from .forms import SignupForm,ReviewAdd,AddressBookForm,ProfileForm
 from django.contrib.auth import login,authenticate
 from django.contrib.auth.decorators import login_required
-#paypal
+
+# Paystack Integration
 from django.urls import reverse
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
-from paypal.standard.forms import PayPalPaymentsForm
-# Home Page
+
+# Email sender
+from django.core.mail import send_mail
+
+
+# Create your views here.
 def home(request):
-	banners=Banner.objects.all().order_by('-id')
+	banners = Banner.objects.all().order_by('-id')
 	data=Product.objects.filter(is_featured=True).order_by('-id')
-	return render(request,'index.html',{'data':data,'banners':banners})
+	return render(request,'index.html',{'data':data, 'banners': banners})
 
 # Category
 def category_list(request):
-    data=Category.objects.all().order_by('-id')
-    return render(request,'category_list.html',{'data':data})
+	data = Category.objects.all().order_by('-id')
+	return render(request, 'category_list.html', {'data':data})
 
 # Brand
 def brand_list(request):
-    data=Brand.objects.all().order_by('-id')
-    return render(request,'brand_list.html',{'data':data})
+	data=Brand.objects.all().order_by('-id')
+	return render(request,'brand_list.html', {'data':data})
 
 # Product List
 def product_list(request):
-	total_data=Product.objects.count()
-	data=Product.objects.all().order_by('-id')[:3]
-	min_price=ProductAttribute.objects.aggregate(Min('price'))
-	max_price=ProductAttribute.objects.aggregate(Max('price'))
+	total_data = Product.objects.count()
+	data = Product.objects.all().order_by('-id')[:3]
+	min_price = ProductAttribute.objects.aggregate(Min('price'))
+	max_price = ProductAttribute.objects.aggregate(Max('price'))
 	return render(request,'product_list.html',
 		{
 			'data':data,
-			'total_data':total_data,
-			'min_price':min_price,
-			'max_price':max_price,
+			'total_data': total_data,
+			'min_price': min_price,
+			'max_price': max_price,
 		}
 		)
 
 # Product List According to Category
-def category_product_list(request,cat_id):
-	category=Category.objects.get(id=cat_id)
-	data=Product.objects.filter(category=category).order_by('-id')
-	return render(request,'category_product_list.html',{
-			'data':data,
-			})
+def category_product_list(request, cat_id):
+	total_data = Product.objects.count()
+	category = Category.objects.get(id=cat_id)
+	data = Product.objects.filter(category=category).order_by('-id')
+	return render(request,'category_product_list.html',
+	{
+		'data':data
+	}
+	)
 
 # Product List According to Brand
-def brand_product_list(request,brand_id):
-	brand=Brand.objects.get(id=brand_id)
-	data=Product.objects.filter(brand=brand).order_by('-id')
-	return render(request,'category_product_list.html',{
-			'data':data,
-			})
+def brand_product_list(request, brand_id):
+	total_data = Product.objects.count()
+	brand = Brand.objects.get(id=brand_id)
+	data = Product.objects.filter(brand=brand).order_by('-id')
+	return render(request,'brand_product_list.html', {'data':data})
 
 # Product Detail
 def product_detail(request,slug,id):
@@ -65,7 +72,7 @@ def product_detail(request,slug,id):
 	related_products=Product.objects.filter(category=product.category).exclude(id=id)[:4]
 	colors=ProductAttribute.objects.filter(product=product).values('color__id','color__title','color__color_code').distinct()
 	sizes=ProductAttribute.objects.filter(product=product).values('size__id','size__title','price','color__id').distinct()
-	reviewForm=ReviewAdd()
+	reviewForm = ReviewAdd()
 
 	# Check
 	canAdd=True
@@ -83,15 +90,16 @@ def product_detail(request,slug,id):
 	avg_reviews=ProductReview.objects.filter(product=product).aggregate(avg_rating=Avg('review_rating'))
 	# End
 
-	return render(request, 'product_detail.html',{'data':product,'related':related_products,'colors':colors,'sizes':sizes,'reviewForm':reviewForm,'canAdd':canAdd,'reviews':reviews,'avg_reviews':avg_reviews})
+	return render(request, 'product_detail.html',{'data':product,'related':related_products,'colors':colors,'sizes':sizes,'reviewForm':reviewForm,'canAdd':canAdd,'reviews':reviews})
+
 
 # Search
 def search(request):
-	q=request.GET['q']
+	q = request.POST['q']
 	data=Product.objects.filter(title__icontains=q).order_by('-id')
 	return render(request,'search.html',{'data':data})
 
-# Filter Data
+# Filter Data 
 def filter_data(request):
 	colors=request.GET.getlist('color[]')
 	categories=request.GET.getlist('category[]')
@@ -113,28 +121,27 @@ def filter_data(request):
 	t=render_to_string('ajax/product-list.html',{'data':allProducts})
 	return JsonResponse({'data':t})
 
-# Load More
+# Load More Data
 def load_more_data(request):
 	offset=int(request.GET['offset'])
 	limit=int(request.GET['limit'])
 	data=Product.objects.all().order_by('-id')[offset:offset+limit]
 	t=render_to_string('ajax/product-list.html',{'data':data})
-	return JsonResponse({'data':t}
-)
+	return JsonResponse({'data':t})
 
-# Add to cart
+# Add to Cart
 def add_to_cart(request):
 	# del request.session['cartdata']
-	cart_p={}
-	cart_p[str(request.GET['id'])]={
-		'image':request.GET['image'],
-		'title':request.GET['title'],
-		'qty':request.GET['qty'],
-		'price':request.GET['price'],
+	cart_p = {}
+	cart_p[str(request.GET['id'])] = {
+		'image': request.GET['image'],
+		'title': request.GET['title'],
+		'qty': request.GET['qty'],
+		'price': request.GET['price'],
 	}
 	if 'cartdata' in request.session:
 		if str(request.GET['id']) in request.session['cartdata']:
-			cart_data=request.session['cartdata']
+			cart_data = request.session['cartdata']
 			cart_data[str(request.GET['id'])]['qty']=int(cart_p[str(request.GET['id'])]['qty'])
 			cart_data.update(cart_data)
 			request.session['cartdata']=cart_data
@@ -156,8 +163,7 @@ def cart_list(request):
 	else:
 		return render(request, 'cart.html',{'cart_data':'','totalitems':0,'total_amt':total_amt})
 
-
-# Delete Cart Item
+# Delete from cart
 def delete_cart_item(request):
 	p_id=str(request.GET['id'])
 	if 'cartdata' in request.session:
@@ -171,7 +177,7 @@ def delete_cart_item(request):
 	t=render_to_string('ajax/cart-list.html',{'cart_data':request.session['cartdata'],'totalitems':len(request.session['cartdata']),'total_amt':total_amt})
 	return JsonResponse({'data':t,'totalitems':len(request.session['cartdata'])})
 
-# Delete Cart Item
+# update Cart Item
 def update_cart_item(request):
 	p_id=str(request.GET['id'])
 	p_qty=request.GET['qty']
@@ -186,7 +192,7 @@ def update_cart_item(request):
 	t=render_to_string('ajax/cart-list.html',{'cart_data':request.session['cartdata'],'totalitems':len(request.session['cartdata']),'total_amt':total_amt})
 	return JsonResponse({'data':t,'totalitems':len(request.session['cartdata'])})
 
-# Signup Form
+# SignUp
 def signup(request):
 	if request.method=='POST':
 		form=SignupForm(request.POST)
@@ -196,9 +202,19 @@ def signup(request):
 			pwd=form.cleaned_data.get('password1')
 			user=authenticate(username=username,password=pwd)
 			login(request, user)
+			""""Used during production to send email to user"""
+			subject = 'Welcome to Peace to the world Lifestyle Store'
+			message = 'Thank you for registering with us. We are happy to have you with us.'
+			email_from = settings.production.EMAIL_HOST_USER
+			recipient_list = [user.email]
+			send_mail( subject, message, email_from, recipient_list )
 			return redirect('home')
 	form=SignupForm
 	return render(request, 'registration/signup.html',{'form':form})
+
+# User terms
+def terms(request):
+	return render(request, 'registration/terms.html')
 
 
 # Checkout
@@ -213,7 +229,7 @@ def checkout(request):
 		order=CartOrder.objects.create(
 				user=request.user,
 				total_amt=totalAmt
-			)
+		)
 		# End
 		for p_id,item in request.session['cartdata'].items():
 			total_amt+=int(item['qty'])*float(item['price'])
@@ -229,20 +245,28 @@ def checkout(request):
 				)
 			# End
 		# Process Payment
-		host = request.get_host()
-		paypal_dict = {
-		    'business': settings.PAYPAL_RECEIVER_EMAIL,
-		    'amount': total_amt,
-		    'item_name': 'OrderNo-'+str(order.id),
-		    'invoice': 'INV-'+str(order.id),
-		    'currency_code': 'USD',
-		    'notify_url': 'http://{}{}'.format(host,reverse('paypal-ipn')),
-		    'return_url': 'http://{}{}'.format(host,reverse('payment_done')),
-		    'cancel_return': 'http://{}{}'.format(host,reverse('payment_cancelled')),
-		}
-		form = PayPalPaymentsForm(initial=paypal_dict)
+		# host = request.get_host()
+		item_name='OrderNo-'+str(order.id)
+		invoice='INV-'+str(order.id)
+		currency_code='NGN'
+		# payment_dict = {
+		# 	'amount': total_amt,
+		# 	'item_name': 'OrderNo-'+str(order.id),
+		# 	'invoice': 'INV-'+str(order.id),
+		# 	'currency_code': 'NGN',
+		# }
+		"""For Use in production"""
+		subject="Your order has been placed successfully with invoice number:" + str(item_name)
+		message="You ordered for :" + list(request.session['cartdata']) + "and the total amount is" + str(total_amt) + "Your invoice number is " + str(invoice)
+		email_from = settings.production.EMAIL_HOST_USER
+		recipient_list = [request.user.email]
+		send_mail( subject, message, email_from, recipient_list )
+		mobile=UserAddressBook.objects.filter(user=request.user,status=True).first()
 		address=UserAddressBook.objects.filter(user=request.user,status=True).first()
-		return render(request, 'checkout.html',{'cart_data':request.session['cartdata'],'totalitems':len(request.session['cartdata']),'total_amt':total_amt,'form':form,'address':address})
+		return render(request, 'checkout.html',{'cart_data':request.session['cartdata'],'totalitems':len(request.session['cartdata']),'total_amt':total_amt, 'address':address, 'mobile':mobile, 'item_name':item_name, 'invoice':invoice, 'currency_code':currency_code})
+		# return render(request, 'checkout.html',{'cart_data':request.session['cartdata'],'totalitems':len(request.session['cartdata']),'total_amt':total_amt,'form':form,'address':address})
+
+
 
 @csrf_exempt
 def payment_done(request):
@@ -253,7 +277,6 @@ def payment_done(request):
 @csrf_exempt
 def payment_canceled(request):
 	return render(request, 'payment-fail.html')
-
 
 # Save Review
 def save_review(request,pid):
@@ -323,6 +346,24 @@ def add_wishlist(request):
 def my_wishlist(request):
 	wlist=Wishlist.objects.filter(user=request.user).order_by('-id')
 	return render(request, 'user/wishlist.html',{'wlist':wlist})
+	# total_amt=0
+	# if 'cartdata' in request.session:
+	# 	for p_id,item in request.session['cartdata'].items():
+	# 		total_amt+=int(item['qty'])*float(item['price'])
+	# 	return render(request, 'cart.html',{'cart_data':request.session['cartdata'],'totalitems':len(request.session['cartdata']),'total_amt':total_amt})
+	# else:
+	# 	return render(request, 'cart.html',{'cart_data':'','totalitems':0,'total_amt':total_amt})
+
+# Delete from wishlist
+def delete_wishlist_item(request):
+	pid=str(request.GET['product'])
+	if 'wlist' in request.session:
+		if pid in request.session['wlist']:
+			w_list=request.session['wlist']
+			del request.session['wlist'][pid]
+			request.session['wlist']=w_list
+	t=render_to_string('ajax/wish-list.html',{'w_list':request.session['wlist'], 'totalitems':len(request.session['wlist'])})
+	return JsonResponse({'data':t,'totalitems':len(request.session['wlist'])})
 
 # My Reviews
 def my_reviews(request):
@@ -382,3 +423,6 @@ def update_address(request,id):
 			msg='Data has been saved'
 	form=AddressBookForm(instance=address)
 	return render(request, 'user/update-address.html',{'form':form,'msg':msg})
+
+def password(request):
+	return redirect(request, 'registration/password_change_form.html')

@@ -178,8 +178,8 @@ JET_SIDE_MENU_COMPACT = True
 
 #############################
 ######## Deployment config #########
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
 
 ######################
 

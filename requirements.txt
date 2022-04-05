@@ -1,5 +1,8 @@
 asgiref==3.2.10
+azure-common==1.1.28
 azure-core==1.23.1
+azure-nspkg==3.0.2
+azure-storage==0.20.3
 azure-storage-blob==12.11.0
 certifi==2021.5.30
 cffi==1.15.0
@@ -7,6 +10,7 @@ charset-normalizer==2.0.12
 cryptography==36.0.2
 dj-database-url==0.5.0
 Django==3.1.1
+django-azure-storage==0.20.1
 django-environ==0.8.1
 django-jet-reboot==1.2.0
 django-phonenumber-field==6.1.0

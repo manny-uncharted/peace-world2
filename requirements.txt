@@ -30,7 +30,7 @@ pycparser
 PyMySQL
 # -e git+https://github.com/gbozee/pypaystack.git@24df1c9ca209031e0ec940ff8552d45ca6b55421#egg=pypaystack
 python-dateutil
-python-dotenv==0.10.1
+python-dotenv
 pytz
 requests
 requests-oauthlib

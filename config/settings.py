@@ -44,8 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'whitenoise.runserver_nostatic', # new
     'django.contrib.staticfiles',
-    'cloudinary_storage',
-    'cloudinary',
 ]
 
 MIDDLEWARE = [
@@ -220,15 +218,8 @@ STATIC_URL = '/static/'
 # Extra places for collectstatic to find static files.
 # STATICFILES_DIRS = [os.path.join(BASE_DIR, 'media')]
 
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'mannyuncharted',
-    'API_KEY': '646299265429243',
-    'API_SECRET': '7zhwP27OvR_bJ8JjmaKUCrPY_Y4',
-}
 
 
-# Media settings
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

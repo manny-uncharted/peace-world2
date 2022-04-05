@@ -248,8 +248,8 @@ USE_TZ = True
 
 # MEDIA_URL = '/media/'
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-DEFAULT_FILE_STORAGE = 'storage_point.backend.AzureMediaStorage'
-STATICFILES_STORAGE  = 'storage_point.backend.AzureStaticStorage'
+DEFAULT_FILE_STORAGE = 'main.storage_point.AzureMediaStorage'
+STATICFILES_STORAGE  = 'main.storage_point.AzureStaticStorage'
 
 AZURE_STORAGE_KEY = os.environ.get('AZURE_STORAGE_KEY', False)
 AZURE_ACCOUNT_NAME = os.environ.get('AZURE_ACCOUNT_NAME', False)

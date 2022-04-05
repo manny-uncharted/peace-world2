@@ -1,9 +1,9 @@
 asgiref==3.2.10
 azure-common
-azure-core==1.23.1
-azure-nspkg==3.0.2
-azure-storage==0.20.3
-azure-storage-blob==12.11.0
+azure-core
+azure-nspkg
+azure-storage
+azure-storage-blob
 certifi==2021.5.30
 cffi==1.15.0
 charset-normalizer==2.0.12
@@ -28,7 +28,7 @@ Pillow==9.0.1
 psycopg2==2.9.1
 pycparser==2.21
 PyMySQL==1.0.2
--e git+https://github.com/gbozee/pypaystack.git@24df1c9ca209031e0ec940ff8552d45ca6b55421#egg=pypaystack
+# -e git+https://github.com/gbozee/pypaystack.git@24df1c9ca209031e0ec940ff8552d45ca6b55421#egg=pypaystack
 python-dateutil==2.8.2
 python-dotenv==0.19.2
 pytz==2020.1

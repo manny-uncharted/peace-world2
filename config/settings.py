@@ -243,7 +243,10 @@ USE_TZ = True
 # # Extra places for collectstatic to find static files.
 # # STATICFILES_DIRS = [os.path.join(BASE_DIR, 'media')]
 
-
+AZURE_STORAGE_KEY = os.environ.get('AZURE_STORAGE_KEY', False)
+AZURE_ACCOUNT_NAME = os.environ.get('AZURE_ACCOUNT_NAME', False)
+AZURE_MEDIA_CONTAINER = os.environ.get('AZURE_MEDIA_CONTAINER', 'media')
+AZURE_STATIC_CONTAINER = os.environ.get('AZURE_STATIC_CONTAINER', 'static')
 
 
 # MEDIA_URL = '/media/'
@@ -251,10 +254,6 @@ USE_TZ = True
 DEFAULT_FILE_STORAGE = 'config.storage_point.AzureMediaStorage'
 STATICFILES_STORAGE  = 'config.storage_point.AzureStaticStorage'
 
-AZURE_STORAGE_KEY = os.environ.get('AZURE_STORAGE_KEY', False)
-AZURE_ACCOUNT_NAME = os.environ.get('AZURE_ACCOUNT_NAME', False)
-AZURE_MEDIA_CONTAINER = os.environ.get('AZURE_MEDIA_CONTAINER', 'media')
-AZURE_STATIC_CONTAINER = os.environ.get('AZURE_STATIC_CONTAINER', 'static')
 
 # AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.azureedge.net'  # CDN URL
 AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'  # Files URL

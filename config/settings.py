@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 from django.core.management.utils import get_random_secret_key
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 print(BASE_DIR)
@@ -43,7 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'whitenoise.runserver_nostatic', # new
     'django.contrib.staticfiles',
-    # 'paypal.standard.ipn'
+    'cloudinary_storage',
+    'cloudinary',
 ]
 
 MIDDLEWARE = [
@@ -154,6 +156,59 @@ USE_L10N = True
 USE_TZ = True
 
 
+
+# Setting up Logging
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'filters': {
+#         'require_debug_false': {
+#             '()': 'django.utils.log.RequireDebugFalse'
+#         }
+#     },
+#     'formatters': {
+#         'verbose': {
+#             'format': '[contactor] %(levelname)s %(asctime)s %(message)s'
+#         },
+#     },
+#     'handlers': {
+#         # Send all messages to console
+#         'console': {
+#             'level': 'DEBUG',
+#             'class': 'logging.StreamHandler',
+#         },
+#         # Send info messages to syslog
+#         'syslog':{
+#             'level':'INFO',
+#             'class': 'logging.handlers.SysLogHandler',
+#             'facility': SysLogHandler.LOG_LOCAL2,
+#             'address': '/dev/log',
+#             'formatter': 'verbose',
+#         },
+#         # Warning messages are sent to admin emails
+#         'mail_admins': {
+#             'level': 'WARNING',
+#             'filters': ['require_debug_false'],
+#             'class': 'django.utils.log.AdminEmailHandler',
+#         },
+#         # critical errors are logged to sentry
+#         'sentry': {
+#             'level': 'ERROR',
+#             'filters': ['require_debug_false'],
+#             'class': 'raven.contrib.django.handlers.SentryHandler',
+#         },
+#     },
+#     'loggers': {
+#         # This is the "catch all" logger
+#         '': {
+#             'handlers': ['console', 'syslog', 'mail_admins', 'sentry'],
+#             'level': 'DEBUG',
+#             'propagate': False,
+#         },
+#     }
+# }
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
@@ -163,9 +218,17 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
 # Extra places for collectstatic to find static files.
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'media')]
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'media')]
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'mannyuncharted',
+    'API_KEY': '646299265429243',
+    'API_SECRET': '7zhwP27OvR_bJ8JjmaKUCrPY_Y4',
+}
 
 
+# Media settings
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.RawMediaCloudinaryStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

@@ -1,5 +1,5 @@
 asgiref==3.2.10
-azure-common==1.1.28
+azure-common
 azure-core==1.23.1
 azure-nspkg==3.0.2
 azure-storage==0.20.3

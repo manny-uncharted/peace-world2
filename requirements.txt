@@ -11,7 +11,7 @@ cryptography
 dj-database-url
 Django==3.1.1
 django-azure-storage    #
-django-environ==0.4.6
+django-environ
 django-jet-reboot
 django-phonenumber-field
 django-storages     # for Azure storage

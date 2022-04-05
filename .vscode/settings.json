@@ -1,3 +1,4 @@
 {
-    "appService.deploySubpath": "."
+    "appService.deploySubpath": ".",
+    "appService.defaultWebAppToDeploy": "/subscriptions/acaccb42-2b1a-4ad4-a442-ce2e3aa7ddd8/resourceGroups/peacetotheworldlifestyle/providers/Microsoft.Web/sites/peacetotheworldlifestyle"
 }

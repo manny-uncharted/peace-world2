@@ -1,4 +1,5 @@
 from django.conf import settings
+from settings import AZURE_ACCOUNT_NAME, AZURE_STORAGE_KEY, AZURE_MEDIA_CONTAINER, AZURE_STATIC_CONTAINER
 from storages.backends.azure_storage import AzureStorage
 
 

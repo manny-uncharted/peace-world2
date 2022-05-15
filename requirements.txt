@@ -9,7 +9,7 @@ cffi
 charset-normalizer
 cryptography
 dj-database-url
-Django==3.1.1
+Django==3.1.14
 django-azure-storage    #
 django-environ
 django-jet-reboot

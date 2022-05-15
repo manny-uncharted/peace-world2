@@ -25,10 +25,10 @@ print(BASE_DIR)
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY", get_random_secret_key())
 
-DEBUG = False
+DEBUG = True
 
 # SECURITY WARNING: update this when you have the production host
-ALLOWED_HOSTS = ['peacetotheworldlifestyle.azurewebsites.net']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'whitenoise.runserver_nostatic', # new
     'django.contrib.staticfiles',
-    'storages',
 ]
 
 MIDDLEWARE = [
@@ -86,13 +85,6 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 
 
 ###########################
@@ -180,80 +172,9 @@ USE_TZ = True
 
 
 
-# Setting up Logging
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'filters': {
-#         'require_debug_false': {
-#             '()': 'django.utils.log.RequireDebugFalse'
-#         }
-#     },
-#     'formatters': {
-#         'verbose': {
-#             'format': '[contactor] %(levelname)s %(asctime)s %(message)s'
-#         },
-#     },
-#     'handlers': {
-#         # Send all messages to console
-#         'console': {
-#             'level': 'DEBUG',
-#             'class': 'logging.StreamHandler',
-#         },
-#         # Send info messages to syslog
-#         'syslog':{
-#             'level':'INFO',
-#             'class': 'logging.handlers.SysLogHandler',
-#             'facility': SysLogHandler.LOG_LOCAL2,
-#             'address': '/dev/log',
-#             'formatter': 'verbose',
-#         },
-#         # Warning messages are sent to admin emails
-#         'mail_admins': {
-#             'level': 'WARNING',
-#             'filters': ['require_debug_false'],
-#             'class': 'django.utils.log.AdminEmailHandler',
-#         },
-#         # critical errors are logged to sentry
-#         'sentry': {
-#             'level': 'ERROR',
-#             'filters': ['require_debug_false'],
-#             'class': 'raven.contrib.django.handlers.SentryHandler',
-#         },
-#     },
-#     'loggers': {
-#         # This is the "catch all" logger
-#         '': {
-#             'handlers': ['console', 'syslog', 'mail_admins', 'sentry'],
-#             'level': 'DEBUG',
-#             'propagate': False,
-#         },
-#     }
-# }
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.9/howto/static-files/
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
 
-AZURE_STORAGE_KEY = os.environ.get('AZURE_STORAGE_KEY', False)
-AZURE_ACCOUNT_NAME = os.environ.get('AZURE_ACCOUNT_NAME', False)
-AZURE_MEDIA_CONTAINER = os.environ.get('AZURE_MEDIA_CONTAINER', 'media')
-# AZURE_STATIC_CONTAINER = os.environ.get('AZURE_STATIC_CONTAINER', 'static')
-
-
-# MEDIA_URL = '/media/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-DEFAULT_FILE_STORAGE = 'config.storage_point.AzureMediaStorage'
-# STATICFILES_STORAGE  = 'config.storage_point.AzureStaticStorage'
-
-
-# AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.azureedge.net'  # CDN URL
-AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'  # Files URL
-
-# STATIC_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{AZURE_STATIC_CONTAINER}/'
-MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{AZURE_MEDIA_CONTAINER}/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
@@ -262,13 +183,5 @@ LOGIN_REDIRECT_URL='home'
 LOGOUT_REDIRECT_URL='login'
 
 JET_SIDE_MENU_COMPACT = True
-
-
-#############################
-######## Deployment config #########
-# CSRF_COOKIE_SECURE = True
-# SESSION_COOKIE_SECURE = True
-
-######################
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

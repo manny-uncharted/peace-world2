@@ -1,10 +1,10 @@
 from django.db import models
 from django.utils.html import mark_safe
 from django.contrib.auth.models import User
-from config.storage_point import AzureMediaStorage as AMS
+# from config.storage_point import AzureMediaStorage as AMS
 # Banner
 class Banner(models.Model):
-    img=models.ImageField(storage=AMS, upload_to="banner_imgs/")
+    img=models.ImageField(upload_to="banner_imgs/")
     alt_text=models.CharField(max_length=300)
 
     class Meta:
@@ -19,7 +19,7 @@ class Banner(models.Model):
 # Category
 class Category(models.Model):
     title=models.CharField(max_length=100)
-    image=models.ImageField(storage=AMS, upload_to="cat_imgs/")
+    image=models.ImageField(upload_to="cat_imgs/")
 
     class Meta:
         verbose_name_plural='2. Categories'
@@ -33,7 +33,7 @@ class Category(models.Model):
 # Brand
 class Brand(models.Model):
     title=models.CharField(max_length=100)
-    image=models.ImageField(storage=AMS, upload_to="brand_imgs/")
+    image=models.ImageField(upload_to="brand_imgs/")
 
     class Meta:
         verbose_name_plural='3. Brands'
@@ -89,7 +89,7 @@ class ProductAttribute(models.Model):
     color=models.ForeignKey(Color,on_delete=models.CASCADE)
     size=models.ForeignKey(Size,on_delete=models.CASCADE)
     price=models.PositiveIntegerField(default=0)
-    image=models.ImageField(storage=AMS, upload_to="product_imgs/",null=True)
+    image=models.ImageField(upload_to="product_imgs/",null=True)
 
     class Meta:
         verbose_name_plural='7. ProductAttributes'

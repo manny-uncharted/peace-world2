@@ -89,15 +89,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 ###########################
 ####### Deployment Config ###########
-EMAIL_USE_TLS = True
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_PASSWORD = 'Pe@cet0thew0rld' #my gmail password
-EMAIL_HOST_USER = 'peacetotheworldlifestyle@gmail.com' #my gmail username
-DEFAULT_FROM_EMAIL = 'peacetotheworldlifestyle@gmail.com'
-SERVER_EMAIL = 'peacetotheworldlifestyle@gmail.com'
-EMAIL_PORT = 587
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
 #############
 
 # hostname = os.environ['POSTGRES_DBHOST']

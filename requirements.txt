@@ -9,8 +9,7 @@ cffi
 charset-normalizer
 cryptography
 dj-database-url
-Django==3.1.1
-django-azure-storage    #
+Django
 django-environ
 django-jet-reboot
 django-phonenumber-field
@@ -19,16 +18,13 @@ feedparser  # for RSS
 future  # for Python 2.7
 gunicorn    # for gunicorn
 idna
-isodate 
-msrest  # azure-storage-common
+isodate
 oauthlib
 Paperboy   # for sending emails
-# phonenumbers==8.12.44
 Pillow
 psycopg2
 pycparser
 PyMySQL
-# -e git+https://github.com/gbozee/pypaystack.git@24df1c9ca209031e0ec940ff8552d45ca6b55421#egg=pypaystack
 python-dateutil
 python-dotenv
 pytz
